@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 
 public class CacheTest {
 
-    public static class RetrieveInspector implements Cache.Retriever<Long,String> {
+    public static class RetrieveInspector implements CacheRetriever<Long,String> {
         List<Long> log = new ArrayList<Long>();
         public String retrieve( Long id ) {
             log.add(id);

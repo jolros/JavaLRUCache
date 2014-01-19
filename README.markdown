@@ -7,7 +7,7 @@ Some of this depends on the efficiency of the underlying `HashMap` data structur
 Usage:
 
 ```java
-public static class UserRetriever implements Cache.Retriever<Long, User> {
+public static class UserRetriever implements CacheRetriever<Long, User> {
         
     public User retrieve( Long id ) {
         // Expensive operation

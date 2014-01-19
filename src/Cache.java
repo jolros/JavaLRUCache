@@ -1,20 +1,16 @@
 import java.util.HashMap;
 import java.util.Map;
 
-public class Cache<I, T> {
-
-    public static interface Retriever<I,T> {
-        public T retrieve( I id );
-    }
+public class Cache<I, T> implements CacheRetriever<I,T> {
 
     private int maxSize;
-    private Retriever<I,T> retriever;
+    private CacheRetriever<I,T> retriever;
 
     private Map<I,KeyValueDoublyLinkedList<I,T>> cache;
     KeyValueDoublyLinkedList<I,T> policyHead;
     KeyValueDoublyLinkedList<I,T> policyTail;
 
-    public Cache(int maxSize, Retriever<I, T> retriever) {
+    public Cache(int maxSize, CacheRetriever<I, T> retriever) {
         this.maxSize = maxSize;
         this.retriever = retriever;
         this.cache = new HashMap<I,KeyValueDoublyLinkedList<I,T>>(maxSize);
