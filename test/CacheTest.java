@@ -30,12 +30,12 @@ public class CacheTest {
         Cache<Long,String> cache;
 
         cache = new Cache<Long,String>( 5, inspector);
-        for (Integer num : plan) cache.retrieve( new Long( num ) );
+        for (Integer num : plan) cache.retrieve(new Long(num));
         assertEquals( 6, inspector.getNumberOfRetrieves() );
         inspector.reset();
 
         cache = new Cache<Long,String>( 1, inspector);
-        for (Integer num : plan) cache.retrieve( new Long( num ) );
+        for (Integer num : plan) cache.retrieve(new Long(num));
         assertEquals( 8, inspector.getNumberOfRetrieves() );
         inspector.reset();
     }
