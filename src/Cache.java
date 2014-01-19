@@ -25,14 +25,15 @@ public class Cache<I, T> {
 
         if (element != null) {
 
-            if (element.equals(policyHead)) {
-                policyHead = element.getNext();
-            }
-            if (element.equals(policyTail)) {
-                policyTail = element.getPrevious();
-            }
+            if (!element.equals(policyTail)) {
+                if (element.equals(policyHead)) {
+                    policyHead = element.getNext();
+                }
 
-            element.extricate();
+                element.extricate();
+                policyTail.setNext(element);
+                policyTail = element;
+            }
 
         } else {
 
@@ -55,14 +56,14 @@ public class Cache<I, T> {
             }
 
             cache.put( id, element );
-        }
 
-        if (policyTail == null) {
-            policyTail = element;
-            policyHead = element; // We know we this isn't set either
-        } else {
-            policyTail.setNext(element);
-            policyTail = element;
+            if (policyTail == null) {
+                policyTail = element;
+                policyHead = element; // We know we this isn't set either
+            } else {
+                policyTail.setNext(element);
+                policyTail = element;
+            }
         }
 
         return element.getItem();
