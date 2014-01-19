@@ -10,18 +10,18 @@ public class Cache<I, T> {
     private int maxSize;
     private Retriever<I,T> retriever;
 
-    private Map<I,DoublyLinkedList<I,T>> cache;
-    DoublyLinkedList<I,T> policyHead;
-    DoublyLinkedList<I,T> policyTail;
+    private Map<I,KeyValueDoublyLinkedList<I,T>> cache;
+    KeyValueDoublyLinkedList<I,T> policyHead;
+    KeyValueDoublyLinkedList<I,T> policyTail;
 
     public Cache(int maxSize, Retriever<I, T> retriever) {
         this.maxSize = maxSize;
         this.retriever = retriever;
-        this.cache = new HashMap<I,DoublyLinkedList<I,T>>(maxSize);
+        this.cache = new HashMap<I,KeyValueDoublyLinkedList<I,T>>(maxSize);
     }
 
     public T retrieve( I id ) {
-        DoublyLinkedList<I,T> element = cache.get(id);
+        KeyValueDoublyLinkedList<I,T> element = cache.get(id);
 
         if (element != null) {
 
@@ -31,7 +31,7 @@ public class Cache<I, T> {
                 }
 
                 element.extricate();
-                policyTail.setNext(element);
+                policyTail.add(element);
                 policyTail = element;
             }
 
@@ -40,12 +40,12 @@ public class Cache<I, T> {
             // Expensive lookup
             T item = retriever.retrieve(id);
 
-            element = new DoublyLinkedList<I,T>( id, item );
+            element = new KeyValueDoublyLinkedList<I,T>( id, item );
 
             if (cache.size() == this.maxSize) {
-                cache.remove(policyHead.getId());
+                cache.remove(policyHead.getKey());
                 if (policyHead.hasNext()) {
-                    DoublyLinkedList<I,T> newHead = policyHead.getNext();
+                    KeyValueDoublyLinkedList<I,T> newHead = policyHead.getNext();
                     newHead.removePrevious();
                     policyHead = newHead;
                 } else {
@@ -61,12 +61,12 @@ public class Cache<I, T> {
                 policyTail = element;
                 policyHead = element; // We know we this isn't set either
             } else {
-                policyTail.setNext(element);
+                policyTail.add(element);
                 policyTail = element;
             }
         }
 
-        return element.getItem();
+        return element.getValue();
     }
 
 }
